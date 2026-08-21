@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const jwt = require("jsonwebtoken")
 const app = express()
 const port = 3000
 const cors = require("cors")
@@ -86,8 +87,17 @@ const User = mongoose.model("user", userSchema);
                 })
             }
 
+            const token = jwt.sign(
+              {
+                id: user._id,
+                email: user.email
+              },
+              "mysecretkey"
+            )
+
             res.status(201).json({
                 message: "Login Successfully",
+                token: token,
                 user: user
             })
             
